@@ -1,5 +1,53 @@
 # JARVIS
 
+## Install the local Windows app and Android companion
+
+On a Windows x64 laptop, extract this repository's ZIP and double-click
+**[Install-JARVIS.cmd](Install-JARVIS.cmd)** in its main folder. It downloads the
+latest published JARVIS Windows installer, verifies the exact release manifest,
+file size and SHA-256, and opens the standard installer. Follow its prompts,
+then open **JARVIS** from Start. The download is approximately 200 MB; model
+weights are downloaded separately when needed. Windows security prompts remain
+enabled.
+
+For the folder `%USERPROFILE%\Downloads\JARVIS-OS-V.2-main\JARVIS`, look for
+`Install-JARVIS.cmd` there or in its parent `JARVIS-OS-V.2-main`. An older ZIP
+will not contain the new launcher: download a fresh **Code > Download ZIP**
+from `main`, or get **JARVIS-Setup.exe** directly from the
+[published releases](https://github.com/cutebody42-web/JARVIS-OS-V.2/releases).
+
+Continue with the [laptop and phone installation guide](docs/JARVIS-INSTALL.md)
+for existing Ollama model folders, face enrollment, Android installation,
+phone fingerprint pairing, and real-device checks.
+**The Windows installer includes the Brain runtime; Python and a Gemini key are
+not required for this product.** Initial local-AI setup downloads missing model
+weights and can install Ollama with owner approval.
+
+Each published installer is pinned to its source commit by `jarvis-update.json`.
+The default `jarvis-core-1b` uses the Llama 3.2 1B base with a JARVIS coordinator
+profile and hidden Ollama experts; the separate 1.5B training pipeline does not
+contain trained-from-scratch weights yet. Windows VM and Android emulator
+validation do not certify the owner's physical microphone, camera, or
+fingerprint sensor. See the guide for the current limits and acceptance steps.
+
+> **Integrated kernel: NEXUS V2.** The repository contains the owner-authority kernel, adaptive Gemini/Ollama routing, TABY/FRIDAY/JARVIS profiles, durable semantic memory/sync, signed peer authentication, explicit phone/device pairing, and the typed Windows broker contract. The packaged product presents one JARVIS identity. Physical Windows microphone/camera/iGPU/admin execution remains uncertified until tested on the target machine.
+
+## NEXUS V2
+
+The cloud-tested NEXUS V2 stack is developed in this repository and is no longer a separate experimental project. Its main architecture is:
+
+- **TABY** — the single user-visible identity and runtime presence.
+- **JARVIS** — strategic/engineering cognition profile.
+- **FRIDAY** — low-latency realtime cognition profile.
+- **OwnerKernel / ActionGateway** — exact-consent, capability-based authority. Model text cannot grant privileges.
+- **Adaptive model stack** — Gemini + local Ollama, current hardware snapshots, warm/cold runtime lifecycle and deterministic fallbacks.
+- **Semantic local-first sync** — vector clocks, deterministic merge policies, transactional materialization and per-peer ACK/retry.
+- **Device trust** — Ed25519-signed sync, explicit trusted-peer registry, revocation and one-time pairing.
+- **Windows broker contract** — short-lived signed permits for typed capabilities only; there is no generic shell/PowerShell execution surface.
+
+Cloud CI and the full legacy regression gate exercise these layers together. The manual Windows hardware-certification workflow remains a release gate for functionality that cannot be honestly proven in GitHub-hosted runners.
+
+
 Local Gemini Live desktop assistant with a PyQt6 interface, voice interaction, detachable panels, and optional browser, file, screen, and messaging tools.
 
 JARVIS also includes a dedicated presentation studio that creates, edits,
@@ -7,7 +55,7 @@ redesigns, and extends editable widescreen `.pptx` decks from documents, data,
 images, audio, and video, with optional PDF export. See the
 [usage guide](docs/USAGE.md#6-powerpoint-presentations) for examples.
 
-## Requirements
+## Legacy Gemini desktop: requirements
 
 You need **Python 3.11 or newer** installed to set up and run JARVIS. Confirm
 your Python version before continuing:
@@ -16,12 +64,12 @@ your Python version before continuing:
 python --version
 ```
 
-## Quick start (Windows, macOS, Linux)
+## Legacy Gemini desktop: quick start (Windows, macOS, Linux)
 
 In Terminal, run:
 
 ```bash
-git clone https://github.com/MAL19INDUSTRIES/JARVIS-OS-V.2.git
+git clone https://github.com/cutebody42-web/JARVIS-OS-V.2.git
 cd JARVIS-OS-V.2
 python scripts/setup_jarvis.py
 ```
@@ -77,7 +125,7 @@ API host. Configure `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WS_URL` on Vercel.
 The deployment workflow runs manually after the Fly and Vercel repository
 secrets have been added.
 
-## Manual setup
+## Legacy Gemini desktop: manual setup
 
 ```bash
 python3 -m venv .venv
@@ -125,6 +173,7 @@ installs the same `jarvis` command through the standard Python package entry poi
 
 ## Documentation
 
+- [Install the local Windows app and Android companion](docs/JARVIS-INSTALL.md)
 - [Usage guide](docs/USAGE.md)
 - [Tutorial](docs/TUTORIAL.md)
 - [Complete QA and bug-audit guide](docs/QA.md)

@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: ["main", "product/jarvis-brain"]
 
 jobs:
   backend:
@@ -17,7 +17,7 @@ jobs:
           POSTGRES_PASSWORD: jarvis
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U jarvis"
+          --health-cmd "pg_isready -U jarvis -d jarvis_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -38,11 +38,25 @@ jobs:
       AUTO_CREATE_TABLES: "0"
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1
       - run: pip install -r requirements.txt
       - run: alembic upgrade head
-      - run: python -m unittest -v tests.test_phase1_decoupling tests.test_hosted_api tests.test_core_resilience
+      - run: >-
+          python -m unittest -v
+          tests.test_phase1_decoupling
+          tests.test_hosted_api
+          tests.test_core_resilience
+          tests.test_temporal_memory
+          tests.test_vector_index
+          tests.test_hybrid_retrieval
+          tests.test_local_embedding
+          tests.test_embedding_memory
+          tests.test_android_signing
 
   frontend:
     runs-on: ubuntu-latest
@@ -50,8 +64,13 @@ jobs:
       run: { working-directory: web }
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: npm, cache-dependency-path: web/package-lock.json }
+      - name: Verify immutable preview publication and branch gates
+        working-directory: .
+        run: node --test tests/publish_preview.test.cjs
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
